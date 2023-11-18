@@ -1,11 +1,14 @@
 package com.study.springsecuritybasic.config.auth;
 
 import com.study.springsecuritybasic.model.User;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * 시큐리티가 /login 주소 요청을 낚아채서 로그인 진행
@@ -15,7 +18,8 @@ import java.util.Collection;
  * User정보로 Authentication 객체 안에 넣을 수 있는 오브젝트도 정해져 있다.(UserDetails 타입 객체)
  *
  */
-public class PrincipalDetails implements UserDetails {
+@Data
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;
 
@@ -23,6 +27,11 @@ public class PrincipalDetails implements UserDetails {
         this.user = user;
     }
 
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
 
     // 해당 유저의 권한을 return
     @Override
@@ -75,5 +84,10 @@ public class PrincipalDetails implements UserDetails {
         // 1년동안 로그인을 안하면 휴면 계정으로 전환
         // 현재시간 - 로그인 시간 -> 1년 초과시 return false
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return user.getUsername();
     }
 }
