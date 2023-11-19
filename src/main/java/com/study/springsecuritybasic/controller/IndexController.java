@@ -45,6 +45,7 @@ public class IndexController {
         return "OAuth 세션 정보 확인하기";
     }
 
+
     @GetMapping({"", "/"})
     public String index() {
 
@@ -53,8 +54,11 @@ public class IndexController {
         return "index"; // src/main/resources/templates/index.mustache 찾게 되는데 .html로 설정 변경
     }
 
+
+    // 일반 로그인, OAuth 로그인 모두 PrincipalDetails를 받을 수 있음
     @GetMapping("/user")
-    public @ResponseBody String user() {
+    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        System.out.println("principalDetails : " + principalDetails.getUser());
         return "user";
     }
 
